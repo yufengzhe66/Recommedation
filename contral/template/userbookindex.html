@@ -1,0 +1,202 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+		<title>书城</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="">
+		<meta name="author" content="">
+		<!-- Bootstrap style -->
+		<link id="callCss" rel="stylesheet" href="/static/user/themes/bootshop/bootstrap.min.css" media="screen" />
+		<link href="/static/user/themes/css/base.css" rel="stylesheet" media="screen" />
+		<!-- Bootstrap style responsive -->
+		<link href="/static/user/themes/css/bootstrap-responsive.min.css" rel="stylesheet" />
+		<link href="/static/user/themes/css/font-awesome.css" rel="stylesheet" type="text/css">
+		<!-- Google-code-prettify -->
+		<link href="/static/user/themes/js/google-code-prettify/prettify.css" rel="stylesheet" />
+		<!-- fav and touch icons -->
+		<link rel="shortcut icon" href="/static/user/themes/images/ico/favicon.ico">
+		<link rel="apple-touch-icon-precomposed" sizes="72x72" href="/static/user/themes/images/ico/apple-touch-icon-72-precomposed.png">
+		<link rel="apple-touch-icon-precomposed" href="/static/user/themes/images/ico/apple-touch-icon-57-precomposed.png">
+		<style type="text/css" id="enject"></style>
+		<style type="text/css">
+			ol li{list-style-type: none;color:#787878;}
+			ol li span{color: #585858;}
+		</style>
+	</head>
+
+	
+
+
+
+
+		<!-- Header End====================================================================== -->
+		<body>
+		
+			<div id="header">
+			<div class="container">
+				
+					<div id="welcomeLine" class="row">
+						{% if user!=None %}
+						<div class="span6"><a href="{{url_for('userlogout')}}">[ 退出 ] </a></div>
+						{% else %}
+						<div class="span6"><a href="{{url_for('userlogin')}}">[ 请登录 ] </a></div>
+						{% endif %}
+					</div>
+			</div>
+			</div>
+			
+				<!-- Navbar ================================================== -->
+				<div id="logoArea" class="navbar">
+					<a id="smallScreen" data-target="#topMenu" data-toggle="collapse" class="btn btn-navbar">
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</a>
+					<div class="navbar-inner">
+						<a class="brand" href="/static/servlet/BookServlet/bookPager?pageNo=1"><img src="/static/user/themes/images/logo.png" alt="Bootsshop" /></a>
+						<form class="form-inline navbar-search" method="get" action="/static/servlet/BookServlet/bookPager">
+							<input class="srchTxt" type="text" name="keyWord" disabled="disabled" placeholder="不可用"/>
+							<button type="submit" id="submitButton" class="btn btn-primary" disabled="disabled">搜</button>
+							<input type="text" name="pageNo" class="hidden active" value="1"/>
+						</form>
+						
+						</div>
+					</div>
+				</div>
+			</div>
+	
+
+
+
+
+
+
+
+
+			{% for post in posts %}
+
+		<div id="mainBody" style="min-height: 350px;">
+			<div class="container">
+				<div class="row">
+					<div id="" class="span3">
+						<img src="/static/img/book.jpg" style="width:230px;height:290px;" alt="Fujifilm FinePix S2950 Digital Camera" />
+					</div>
+					<div class="span6">
+						<h3>{{post.b_name}}</h3>
+						<span style="margin-right: 20px;">作者：{{post.b_author}}</span>
+						<span style="margin-right: 20px;">出版公司：{{post.b_publish}}</span>
+						<span>作品类型：{{post.b_type}}</span>
+						
+						<p>上架时间{{post.b_date}}</p>
+					</div>
+						<div class="control-group">
+							<label class="control-label">
+								<span style="margin-right: 20px;">库存：{{post.b_stock}}本</span>
+								<span  style="margin-right: 20px;">总销量：{{post.b_totalSold}}本</span>
+								<span>单价：${{post.b_price}}</span>
+							</label>
+							<form method="POST" action="{{url_for('addtocart',book_id=post.b_id)}}">
+							<div class="controls">
+								<input type="number" class="span1" placeholder="购买数量" name="bookNum" max="{{post.b_stock}}" min="1"/>
+								{% if post.b_stock>0 %}
+								<input type="submit"  data-toggle="modal" data-target="#addcart" onclick="alert('提交订单?')" class="btn btn-lg btn-primary pull-right"></a>
+							     {% endif %}
+							</div>
+							</form>
+								
+							</div>
+						</div>
+					</div>
+				
+		{%endfor%}
+		
+
+	</div>
+						
+	<div>
+		<nav>
+			<ul class="pager">
+					
+					
+					<li class="previous">
+						<a href="{% if pagination.has_prev %}{{url_for('userbookindex',page=pagination.page-1)}}{% else %}#{% endif %}" >Prev</a>
+					</li>
+				
+				
+					<li class="previous disabled">
+						<a href="#">&larr; 上一页</a>
+					</li>
+				
+				</li>  
+				{% for p in pagination.iter_pages() %}  
+					<li>  
+					<a href="{{ url_for('userbookindex',page=p)}}">{{p}}</a> 
+					</li>  
+				{% endfor %}  
+				
+			<li>  
+				
+					<li class="next">
+						<a href="{%if pagination.has_next %}{{url_for('userbookindex',page=pagination.page+1)}}{% else %}#{% endif %}" >Next</a>
+					</li>
+			
+				
+					<li class="next disabled">
+						<a href="#">下一页 &rarr;</a>
+					</li>
+				
+				
+			</ul>								
+		</nav>
+	</div>
+</c:if>
+
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+<!-- Footer ================================================================== -->
+<div id="footerSection">
+	<div class="container">
+		<div class="row">
+			<div class="span3">
+				<h5>   Manager</h5>
+				
+				<a href="${basepath}/admin/admin-common/login.jsp" target="_blank">   Admin</a>
+			</div>
+			<div class="span3">
+				<h5>Website</h5>
+				<a href="https://www.baidu.com/" target="_blank">百度</a>
+				<a href="https://www.jd.com/" target="_blank">京东</a>
+			</div>
+			<div class="span3">
+				<h5>Links</h5>
+				<a href="#" >图书馆</a>
+				<a href="#">我爱购物</a>
+			</div>
+		</div>
+	
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+	</body>
+
+</html>

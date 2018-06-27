@@ -1,0 +1,50 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<title>Admin Login</title>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="/static/admin/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="/static/admin/css/bootstrap-responsive.min.css" />
+		<link rel="stylesheet" href="/static/admin/css/matrix-login.css" />
+		<link href="/static/admin/font-awesome/css/font-awesome.css" rel="stylesheet" />
+		<link rel="shortcut icon" href="/static/user/themes/images/ico/favicon.ico">
+	</head>
+
+	<body>
+		<div id="loginbox">
+			<form id="loginform" class="form-vertical"  method="post">
+					{{form.csrf_token()}}
+				<div class="control-group normal_text">
+					<h3><img src="/static/admin/img/logo.png" alt="Logo" /></h3></div>
+				<div class="control-group">
+					<div class="controls">
+						<div class="main_input_box">
+							<span class="add-on bg_lg"><i class="icon-user"></i></span><input type="text" placeholder="Pleace enter your username" name="username"/>
+						</div>
+					</div>
+				</div>
+				<div class="control-group">
+					<div class="controls">
+						<div class="main_input_box">
+							<span class="add-on bg_ly"><i class="icon-lock"></i></span><input type="password" placeholder="Pleace enter your password" name="password"/>
+						</div>
+					</div>
+				</div>
+				<div class="form-actions">
+					
+					<span class="pull-right"><input type="submit" class="btn btn-success" value="Login"/></span>
+				</div>
+
+				{%for message in get_flashed_messages() %}
+				{{message}}
+				{%endfor%}
+
+
+			</form>
+		</div>
+	</body>
+
+</html>

@@ -1,0 +1,198 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+		<title>所有用户</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="">
+		<meta name="author" content="">
+		<!-- Bootstrap style -->
+		<link id="callCss" rel="stylesheet" href="/static/user/themes/bootshop/bootstrap.min.css" media="screen" />
+		<link href="/static/user/themes/css/base.css" rel="stylesheet" media="screen" />
+		<!-- Bootstrap style responsive -->
+		<link href="/static/user/themes/css/bootstrap-responsive.min.css" rel="stylesheet" />
+		<link href="/static/user/themes/css/font-awesome.css" rel="stylesheet" type="text/css">
+		<!-- Google-code-prettify -->
+		<link href="/static/user/themes/js/google-code-prettify/prettify.css" rel="stylesheet" />
+		<!-- fav and touch icons -->
+		<link rel="shortcut icon" href="/static/user/themes/images/ico/favicon.ico">
+		<link rel="apple-touch-icon-precomposed" sizes="72x72" href="/static/user/themes/images/ico/apple-touch-icon-72-precomposed.png">
+		<link rel="apple-touch-icon-precomposed" href="/static/user/themes/images/ico/apple-touch-icon-57-precomposed.png">
+	</head>
+
+	<body>
+			{% if not admin %}
+			<c:redirect url="{{url_for('login')}}"></c:redirect>
+		     {% endif %}
+
+		
+		<div id="header">
+		<div class="container">
+			
+				<div id="welcomeLine" class="row">
+					<div class="span6"><a href="{{url_for('logout')}}}">[ 退出 ] </a>[<strong style="color: red;">{{admin.name}}</strong>]</div>
+					
+					</div>
+				</div>
+			
+			<!-- Navbar ================================================== -->
+			<div id="logoArea" class="navbar">
+				<a id="smallScreen" data-target="#topMenu" data-toggle="collapse" class="btn btn-navbar">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</a>
+				<div class="navbar-inner">
+					<a class="brand" href="/static/servlet/BookServlet/bookPager?pageNo=1"><img src="/static/user/themes/images/logo.png" alt="Bootsshop" /></a>
+					<form class="form-inline navbar-search" method="get" action="/static/servlet/BookServlet/bookPager">
+						<input class="srchTxt" type="text" name="keyWord" disabled="disabled" placeholder="不可用"/>
+						<button type="submit" id="submitButton" class="btn btn-primary" disabled="disabled">搜</button>
+						<input type="text" name="pageNo" class="hidden active" value="1"/>
+					</form>
+					
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		<!-- Header End====================================================================== -->
+		<div id="mainBody" style="min-height: 350px;">
+			<div class="container">
+				<div class="row">
+					<div class="spansujie">
+						<div class="tab-pane">
+								{% for post in posts %}  
+								<div class="row">
+									<div class="span2">
+										{%if post.u_sex=='男'%}
+											<img src="/static/img/man.png" title="我的头像"/>
+											{%endif%}
+											{%if post.u_sex=='女'%}
+											<img src="/static/img/woman.png" title="我的头像"/>
+											{%endif%}
+									</div>
+									<div class="span4">
+										<th>序号:</th>																																	
+										<td>{{post.u_id}}</td><br>
+										<th>用户名:</th>
+										<td>{{post.u_name}}</td><br>
+										<th>性别:</th>
+										<td>{{post.u_sex}}</td><br>
+										<th>年龄:</th>
+										<td>{{post.u_age}}</td><br>
+											
+											
+										</form>
+									</div>
+								</div>
+								<hr class="soft" />
+							{% endfor %}
+						</div>
+						
+							<div>
+								<nav>
+									<ul class="pager">
+											
+											
+											<li class="previous">
+												<a href="{% if pagination.has_prev %}{{url_for('adminuserlist',page=pagination.page-1)}}{% else %}#{% endif %}" >Prev</a>
+											</li>
+										
+										
+											<li class="previous disabled">
+												<a href="#">&larr; 上一页</a>
+											</li>
+										
+										</li>  
+										{% for p in pagination.iter_pages() %}  
+											<li>  
+											<a href="{{ url_for('adminuserlist',page=p)}}">{{p}}</a> 
+											</li>  
+										{% endfor %}  
+										
+									<li>  
+										
+											<li class="next">
+												<a href="{%if pagination.has_next %}{{url_for('adminuserlist',page=pagination.page+1)}}{% else %}#{% endif %}" >Next</a>
+											</li>
+									
+										
+											<li class="next disabled">
+												<a href="#">下一页 &rarr;</a>
+											</li>
+										
+										
+									</ul>								
+								</nav>
+							</div>
+						</c:if>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+		
+
+
+<!-- Footer ================================================================== -->
+<div id="footerSection">
+	<div class="container">
+		<div class="row">
+			<div class="span3">
+				<h5>Manager</h5>
+				<a href="{{url_for('login')}}" target="_blank">Admin</a>
+			</div>
+			<div class="span3">
+				<h5>Website</h5>
+				<a href="https://www.baidu.com/" target="_blank">百度</a>
+				<a href="https://www.jd.com/" target="_blank">京东</a>
+			</div>
+			<div class="span3">
+				<h5>Links</h5>
+				<a href="#" >图书馆</a>
+				<a href="#">我爱购物</a>
+			</div>
+		</div>
+	
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+		<!-- Placed at the end of the document so the pages load faster ============================================= -->
+		<script src="/static/user/themes/js/jquery.js" type="text/javascript"></script>
+		<script src="/static/user/themes/js/bootstrap.min.js" type="text/javascript"></script>
+		<script src="/static/user/themes/js/google-code-prettify/prettify.js"></script>
+		<script src="/static/user/themes/js/bootshop.js"></script>
+		<script src="/static/user/themes/js/jquery.lightbox-0.5.js"></script>
+	</body>
+
+</html>
+
+
+
+
+
+

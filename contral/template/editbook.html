@@ -1,0 +1,210 @@
+
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>Admin</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="/static/admin/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="/static/admin/css/bootstrap-responsive.min.css" />
+		<link rel="stylesheet" href="/static/admin/css/fullcalendar.css" />
+		<link rel="stylesheet" href="/static/admin/css/matrix-style.css" />
+		<link rel="stylesheet" href="/static/admin/css/matrix-media.css" />
+		<link href="/static/admin/font-awesome/css/font-awesome.css" rel="stylesheet" />
+		<link rel="stylesheet" href="/static/admin/css/jquery.gritter.css" />
+		<link rel="shortcut icon" href="/static/user/themes/images/ico/favicon.ico">
+	</head>
+
+	<body>
+	
+     
+
+
+<!--Header-part-->
+{% if not admin %}
+	<c:redirect url="{{url_for('login')}}"></c:redirect>
+{% endif %}
+<div id="header">
+	<h1><a href="{{url_for('index')}}">Matrix Admin</a></h1>
+</div>
+<!--close-Header-part-->
+<!--top-Header-menu-->
+<div id="user-nav" class="navbar navbar-inverse">
+	<ul class="nav">
+		<li class="dropdown" id="profile-messages">
+			<a title="" href="#" data-toggle="dropdown" data-target="#profile-messages" class="dropdown-toggle"><i class="icon icon-user"></i> <span class="text">Welcome {{admin.name}}</span><b class="caret"></b></a>
+			<ul class="dropdown-menu">
+				<li>
+					<a href="{{url_for('index')}}"><i class="icon-user"></i> My Profile</a>
+				</li>
+				<li class="divider"></li>
+				<li>
+					<a href="{{url_for('logout')}}"><i class="icon-key"></i>Log Out</a>
+				</li>
+			</ul>
+		</li>
+		
+	</ul>
+</div>
+<!--close-top-Header-menu-->
+
+<!--start-top-serch-->
+<div id="search">
+	<input type="text" placeholder="Search Book Information" disabled/>
+	<button type="submit" class="tip-bottom" title="Search"><i class="icon-search icon-white"></i></button>
+</div>
+<!--close-top-serch-->
+
+<!--sidebar-menu-->
+<div id="sidebar">
+	<ul>
+		<li class="active">
+			<a href="{{url_for('index')}}"><i class="icon icon-home"></i> <span>Home</span></a>
+		</li>
+		<!--管理员-->
+		<li class="">
+			<a href="{{url_for('changeadmininfo')}}"><i class="icon-info-sign"></i> <span>修改密码</span></a>
+		</li>
+		
+		</li>
+		<!--用户-->
+		<li class="">
+			<a href="{{url_for('adminuserlist')}}"><i class="icon icon-user"></i> <span>查看用户</span></a>
+		</li>
+		<!--订单-->
+		<li class="">
+			<a href="{{url_for('orderinfo')}}"><i class="icon-inbox"></i> <span>查看订单</span></a>
+		</li>
+		<!--书籍-->
+		<li class="submenu">
+			<a href="#"><i class="icon-book"></i> <span>书籍管理</span><span class="label label-important">2</span></a>
+			<ul>
+				<li>
+					<a href="{{url_for('addbook')}}">添加书籍</a>
+				</li>
+				<li>
+					<a href="{{url_for('editbook')}}">编辑书籍</a>
+				</li>
+			</ul>
+		</li>
+		
+	</ul>
+</div>
+<!--sidebar-menu-->
+
+
+
+
+
+
+		<!--main-container-part-->
+		<div id="content">
+			<div id="content-header">
+				<div id="breadcrumb">
+					<a title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a>
+					<a>Admins</a>
+					<a class="current">编辑管理员</a>
+				</div>
+			</div>
+			<div class="container-fluid">
+				<div class="row-fluid">
+					<div class="span12">
+						<div class="widget-box">
+							<div class="widget-title"> <span class="icon"> <i class="icon-th"></i> </span>
+								<h5>Admins&nbsp;&gt;&nbsp;<span class="pull-right" style="color: cornflowerblue;">{{admin.name}}</span></h5>
+								
+							</div>
+							<div class="widget-content nopadding">
+								<table class="table table-bordered table-striped">
+									<thead>
+										<tr>
+											<th>序号</th>
+											<th>书名</th>
+											<th>价格</th>
+											<th>作者</th>
+											<th>库存</th>
+											<th>销量</th>
+											<th>上架时间</th>
+											<th>操作</th>
+										</tr>
+									</thead>
+									<tbody>
+										{% for post in posts %} 
+											
+											<tr class="odd gradeX">
+												<td>{{post.b_id}}</td>
+												<td>{{post.b_name}}</td>
+												<td>{{post.b_price}}</td>
+												<td>{{post.b_author}}</td>
+												<td>{{post.b_stock}}</td>
+												<td>{{post.b_totalSold}}</td>
+												
+												<td>{{post.b_date}}</td>
+												<td class="center">
+                                                    <form method="POST" action="{{url_for('addbooknum',book_id=post.b_id)}}">
+                                                <input type="number" name="num" min="1" max="100"/> 
+                                                <input type="submit" class="btn btn-lg btn-success" onclick="alert('补货成功')" value="补货"/>
+                                                    </form>
+												</td>
+											</tr>
+										{% endfor %}
+									</tbody>
+								</table>
+							</div>
+						</div>
+						
+						<!--分页-->
+						<div class="bs-docs-tooltip-examples">
+							<div class="pagination">
+								<ul>
+                                        <li class="previous">
+												<a href="{% if pagination.has_prev %}{{url_for('editbook',page=pagination.page-1)}}{% else %}#{% endif %}" >Prev</a>
+											</li>
+										
+										
+											<li class="previous disabled">
+												<a href="#">&larr; 上一页</a>
+											</li>
+										
+										</li>  
+										{% for p in pagination.iter_pages() %}  
+											<li>  
+											<a href="{{ url_for('editbook',page=p)}}">{{p}}</a> 
+											</li>  
+										{% endfor %}  
+										
+									<li>  
+										
+											<li class="next">
+												<a href="{%if pagination.has_next %}{{url_for('editbook',page=pagination.page+1)}}{% else %}#{% endif %}" >Next</a>
+											</li>
+									
+										
+											<li class="next disabled">
+												<a href="#">下一页 &rarr;</a>
+											</li>
+										
+									<li>
+										<a>&lt;&lt;&nbsp;-&nbsp;总共{{pagination.pages}}页，当前第{{pagination.page}}页，共{{pagination.total}}条数据&nbsp;-&nbsp;&gt;&gt;</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--End-Action boxes-->
+		<script src="/static/admin/js/jquery.min.js"></script>
+		<script src="/static/admin/js/jquery.ui.custom.js"></script>
+		<script src="/static/admin/js/bootstrap.min.js"></script>
+		<script src="/static/admin/js/jquery.uniform.js"></script>
+		<script src="/static/admin/js/select2.min.js"></script>
+		<script src="/static/admin/js/jquery.dataTables.min.js"></script>
+		<script src="/static/admin/js/matrix.js"></script>
+		<script src="/static/admin/js/matrix.tables.js"></script>
+		
+	</body>
+
+</html>
